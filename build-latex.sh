@@ -1,9 +1,12 @@
 #!/bin/sh
 
+### Install this as a post-receive hook
+### This script expects there to be a file called .latex-built-pointer
+### in the root of the repository. The contents of this file should be
+### the filename of the TEX file to compile
+
 WEBDIR=yourwebdir
 WORKSPACE=your/workspace
-TEX_FILE_NAME=your_file
-TEX_FILE_POINTER=.latex-build-pointer
 
 echo
 echo "**** Pulling changes into Live [Hub's post-update hook]"
@@ -18,6 +21,9 @@ current=`git rev-parse HEAD`
 
 # Update the latest changes in master
 git pull origin master
+
+# Get the name of the TEX file to compile
+TEX_FILE_NAME="`cat .latex-build-pointer`"
 
 # Compile the LaTex stuff
 pdflatex -interaction=batchmode $TEX_FILE_NAME.tex > /dev/null
